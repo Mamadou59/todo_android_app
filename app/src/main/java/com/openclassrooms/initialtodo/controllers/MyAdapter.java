@@ -16,9 +16,11 @@ import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private LiveData<List<Todo>> mListLiveData;
+    private TodoSelected mTodoSelected;
 
-    public MyAdapter(LiveData<List<Todo>> mySampleData){
+    public MyAdapter(LiveData<List<Todo>> mySampleData, TodoSelected todoSelected){
         mListLiveData = mySampleData;
+        mTodoSelected = todoSelected;
     }
     @NonNull
     @Override
@@ -48,6 +50,17 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             layout = itemView;
             mTitle = (TextView) itemView.findViewById(R.id.todo_title);
             mDate = (TextView) itemView.findViewById(R.id.todo_date);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mTodoSelected.displayTodoSelected(mListLiveData.getValue().get(getAdapterPosition()));
+                }
+            });
         }
+    }
+
+    public interface TodoSelected {
+        public void displayTodoSelected(Todo todo);
     }
 }
